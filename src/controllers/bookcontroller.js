@@ -1,6 +1,4 @@
 const bookModel = require("../models/bookModel");
-const userModel = require("../models/userModel");
-
 const reviewModel = require("../models/reviewModel");
 
 //==============================create book====================================//
@@ -79,9 +77,6 @@ const getBooks = async function (req, res) {
   }
 };
 
-
-
-
 //=============================get book by bookID===============================//
 let getBookById = async (req, res) => {
   try {
@@ -91,8 +86,8 @@ let getBookById = async (req, res) => {
     if (!bookData) {
       return res.status(404).send({
         status: false,
-        msg: "No Such Book Exists"
-      })
+        msg: "No Such Book Exists",
+      });
     }
     //getting the data from review Model
     let reviews = await reviewModel
@@ -123,70 +118,74 @@ let getBookById = async (req, res) => {
 
 const updateBook = async (req, res) => {
   try {
-    let requestBody = req.body
-    let bookId = req.params.bookId
+    let requestBody = req.body;
+    let bookId = req.params.bookId;
 
     let book = await bookModel.findOne({ _id: bookId, isDeleted: false });
-    if (!book) { return res.status(404).send({ status: false, msg: "No Such Book found" }) }
+    if (!book) {
+      return res.status(404).send({ status: false, msg: "No Such Book found" });
+    }
 
-    let uniqueTitleAndIsbn = await bookModel.findOne({ $or: [{ title: requestBody.title }, { ISBN: requestBody.ISBN }] });
+    let uniqueTitleAndIsbn = await bookModel.findOne({
+      $or: [{ title: requestBody.title }, { ISBN: requestBody.ISBN }],
+    });
     if (uniqueTitleAndIsbn) {
       if (uniqueTitleAndIsbn.title == requestBody.title)
         return res.status(400).send({
           status: false,
-          msg: "Title Already Exists. Please Input Another title"
-        })
+          msg: "Title Already Exists. Please Input Another title",
+        });
       else {
         return res.status(400).send({
           status: false,
-          msg: "ISBN Number Already Exists. Please Input Another ISBN Number"
-        })
+          msg: "ISBN Number Already Exists. Please Input Another ISBN Number",
+        });
       }
-    };
+    }
     let updatedBookData = await bookModel.findByIdAndUpdate(
       bookId,
       {
         title: requestBody.title,
         excerpt: requestBody.excerpt,
         releasedAt: requestBody.releasedAt,
-        ISBN: requestBody.ISBN
+        ISBN: requestBody.ISBN,
       },
       { new: true }
     );
     res.status(200).send({
       status: true,
       msg: "Book updated Successfulyy",
-       data: updatedBookData });
+      data: updatedBookData,
+    });
   } catch (err) {
-    res.status(500).send({ status: false, error: err.message })
+    res.status(500).send({ status: false, error: err.message });
   }
-}
+};
 
-
-
-// delete book by bookID in path params
+//===========================delete book by bookID in path params========================//
 
 const deleteBook = async (req, res) => {
   try {
-    let bookId = req.params.bookId
-    let checkBook = await bookModel.findOne({ _id: bookId, isDeleted: false })
+    let bookId = req.params.bookId;
+    let checkBook = await bookModel.findOne({ _id: bookId, isDeleted: false });
     if (!checkBook) {
       return res
         .status(404)
-        .send({ status: false, msg: "No such book exists !" })
+        .send({ status: false, msg: "No such book exists !" });
     }
-    let delBook = await bookModel.findByIdAndUpdate(bookId, { isDeleted: true, deletedAt: Date() }, { new: true, upsert: true })
+    let delBook = await bookModel.findByIdAndUpdate(
+      bookId,
+      { isDeleted: true, deletedAt: Date() },
+      { new: true, upsert: true }
+    );
     res.status(200).send({
       status: true,
       msg: "Book deleted successfully",
-      data: delBook
-    })
-
+      data: delBook,
+    });
   } catch (err) {
-    res.status(500).send({ status: false, error: err.message })
+    res.status(500).send({ status: false, error: err.message });
   }
-}
-
-
+};
 
 module.exports = { createBook, getBooks, getBookById, updateBook, deleteBook };

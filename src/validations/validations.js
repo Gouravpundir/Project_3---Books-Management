@@ -49,6 +49,8 @@ function isValidISBN(value) {
   return /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)/.test(value)
 }
 
+//===============================create user=================================//
+
 module.exports = {
   createUser: async (req, res, next) => {
     try {
@@ -126,6 +128,8 @@ module.exports = {
     }
   },
 
+//==============================user login==================================//
+
   userLogin: async (req, res, next) => {
     try {
       let { email, password } = req.body;
@@ -149,6 +153,8 @@ module.exports = {
       res.status(500).send({ status: false, error: err.message });
     }
   },
+
+//===================================create book====================================//
 
   createBook: async (req, res, next) => {
     try {
@@ -220,7 +226,7 @@ module.exports = {
           .status(400)
           .send({ status: false, message: "releasedAt can be a DATE only" });
       }
-      //**Db calls
+//=============================Db calls===============================//
       let user = await userModel.findById(userId);
       if (!user) {
         res.status(400).send({ status: false, message: "User does not exit" });
@@ -246,6 +252,8 @@ module.exports = {
     }
   },
 
+//========================get books============================//
+
   getBookByQuery: async (req, res, next) => {
     try {
       if (req.query.userId) {
@@ -261,6 +269,8 @@ module.exports = {
     }
   },
 
+//==========================get book by id=================================//
+
   getBookByID: async (req, res, next) => {
     try {
       let bookId = req.params.bookId;
@@ -274,6 +284,8 @@ module.exports = {
       res.status(500).send({ status: false, error: e.message });
     }
   },
+
+//=========================create review=================================//
 
   reviews: function (req, res, next) {
     try {
@@ -323,6 +335,8 @@ module.exports = {
     }
   },
 
+//====================================update book=================================//
+
   updateBook: (req, res, next) => {
     try {
       let requestBody = req.body;
@@ -344,6 +358,8 @@ module.exports = {
     }
   },
 
+//=======================delete book by id===========================//
+
   delBookbyBookId: (req, res, next) => {
     try {
       if (!isvalidObjectId(req.params.bookId)) {
@@ -357,6 +373,8 @@ module.exports = {
       res.status(500).send({ status: false, error: e.message });
     }
   },
+
+//======================update review===========================================//
 
   updateReviews: function (req, res, next) {
     //Checking Format of id
@@ -397,6 +415,8 @@ module.exports = {
     }
     next();
   },
+
+//==============================delete review======================================//
 
   deleteReview: (req, res, next) => {
     try {

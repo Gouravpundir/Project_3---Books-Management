@@ -2,10 +2,12 @@ const jwt = require("jsonwebtoken");
 const bookModel = require("../models/bookModel");
 const mongoose = require('mongoose')
 
+//============================validation======================================//
 function isvalidObjectId(ObjectId) {
   return mongoose.Types.ObjectId.isValid(ObjectId);
 }
 
+//==========================authentication=============================//
 exports.authentication = function (req, res, next) {
   //Checking Header is coomimg from the request header or not
 
@@ -39,7 +41,7 @@ exports.authentication = function (req, res, next) {
   }
 };
 
-//Autherization part
+//=============================Autherization================================//
 
 exports.autherization = async function (req, res, next) {
   //console.log(req.headers.userId);
