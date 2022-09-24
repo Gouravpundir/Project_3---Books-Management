@@ -25,13 +25,18 @@ const loginUser = async function (req, res) {
       }
     );
 
-    //Verifing Token
-    let decode = jwt.verify(token, "Group-27-Secret-Key")
-        res.status(201).send({
-          status: true,
-          data: token,
-          tokenDetails: decode
-        })
+//=================================Verifing Token==============================//
+    let decode = jwt.verify(token, "Group-27-Secret-Key");
+    if(!decode){
+      res.status(403).send({status:false,msg:"Please provide valid secret key"})
+    }
+    res.status(201).send({
+      status: true,
+      data: token,
+      userId: decode.userId,
+      exp: decode.exp,
+      iat: decode.iat,
+    });
   } catch (err) {
     return res.status(500).send({
       msg: false,

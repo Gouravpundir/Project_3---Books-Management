@@ -36,7 +36,7 @@ const getBooks = async function (req, res) {
       if (subcategory) {
         filter.subcategory = subcategory;
       }
-      //------if user provide any other filter any these---------//
+      //------if user provide any other filter rather than these---------//
       if (!Object.keys(filter).length) {
         return res.status(404).send({
           status: false,
@@ -57,7 +57,7 @@ const getBooks = async function (req, res) {
         reviews: 1
       }).collation({locale: "en"})
       .sort({ title: 1 });
-    //-----if no book found--------//
+    //-----------------------if no book found---------------------//
     if (!allBooks.length) {
       return res.status(404).send({
         status: false,
