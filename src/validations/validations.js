@@ -289,7 +289,7 @@ module.exports = {
 
   reviews: function (req, res, next) {
     try {
-      //storing Data in object
+      //extract from body
       let { bookId, reviewedBy, reviewedAt, rating } = req.body;
       //bookId (Madatory)
       if (!bookId) {
@@ -319,16 +319,18 @@ module.exports = {
           .send({ status: false, msg: "Provide a valid date in reviwedAt !!" });
       }
       //rating (Madatory)
-      if (!/^[1-5]$/.test(rating)) {
-        return res
-          .status(400)
-          .send({ status: false, msg: "rating should be from 1-5 !!" });
-      }
       if (!rating) {
         return res
           .status(400)
           .send({ status: false, msg: "rating Is required !!" });
       }
+      
+      if (!/^[1-5]$/.test(rating)) {
+        return res
+          .status(400)
+          .send({ status: false, msg: "rating should be from 1-5 !!" });
+      }
+ 
       next();
     } catch (e) {
       res.status(500).send({ status: false, error: e.message });

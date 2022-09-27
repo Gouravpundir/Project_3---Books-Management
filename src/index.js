@@ -6,7 +6,7 @@ app.use(express.json());
 
 mongoose
   .connect(
-    "mongodb+srv://sonal-plutonium:5dJokPsnG43EGYHE@cluster0.koc4qx2.mongodb.net/Group27-DB",
+    "mongodb+srv://gourav-pundir:7HztUn9Bz3zFfxDT@cluster0.tnf1yk0.mongodb.net/gourav-22?retryWrites=true&w=majority",
     {
       useNewUrlParser: true,
     }

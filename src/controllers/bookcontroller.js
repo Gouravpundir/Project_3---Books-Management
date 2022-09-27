@@ -5,7 +5,6 @@ const reviewModel = require("../models/reviewModel");
 
 const createBook = async (req, res) => {
   try {
-    
     req.body.title = req.body.title.replace(/\s+/g, " ");
 
     let newBookCreated = await bookModel.create(req.body);
@@ -54,10 +53,10 @@ const getBooks = async function (req, res) {
         userId: 1,
         category: 1,
         releasedAt: 1,
-        reviews: 1
-      }).collation({locale: "en"})
+        reviews: 1,
+      })
       .sort({ title: 1 });
-    //-----------------------if no book found---------------------//
+    //--------if no book found---------//
     if (!allBooks.length) {
       return res.status(404).send({
         status: false,
@@ -89,7 +88,7 @@ let getBookById = async (req, res) => {
         msg: "No Such Book Exists",
       });
     }
-    //getting the data from review Model
+    //---------getting the data from review Model---------//
     let reviews = await reviewModel
       .find({ bookId: bookId, isDeleted: false })
       .select({
@@ -108,7 +107,7 @@ let getBookById = async (req, res) => {
 
     return res
       .status(200)
-      .send({ status: true, message: "Books list", data: bookReviews });
+      .send({ status: true, msg: "Books data", data: bookReviews });
   } catch (error) {
     return res.status(500).send({ status: false, Error: error.message });
   }
